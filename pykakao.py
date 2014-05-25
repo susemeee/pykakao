@@ -107,14 +107,14 @@ class kakaotalk:
  
         Parameters:
             session_key : KakaoTalk session key. [type str]
-            device_uuid : Device's Uuid. [type str]
+            device_uuid : UUID of the device. [type str]
             user_id : Kakaotalk User Id. [type int]
  
         Returns:
  
  
         Remarks:
-            You can pass any string to 'device_uuid' but base64-encoded string recommended.
+            You must pass string equal to the one you provided in auth() at 'device_uuid'.
         """
  
         self.session_key = session_key
@@ -141,9 +141,12 @@ class kakaotalk:
  
         Remarks:
             You can pass any string to 'comp_name'.
-            You can pass any string to 'device_uuid' but base64-encoded string recommended.
+            You should pass the string with some base64-encrypted value, otherwise Kakao will ban your account for authenticating new PC.
+            (That means, you cannot login to PC Kakaotalk anymore.)
+            I don't know what exactly the value is.
+
             While authenticating, you will get Pass code on your Mobile KakaoTalk.
-            Enter it when pykakao asks Pass code.
+            Enter it when pykakao asks Passcode.
         """
  
         url = "https://sb-talk.kakao.com/win32/account/login.json"
@@ -160,7 +163,6 @@ class kakaotalk:
         data["password"] = password
         data["name"] = comp_name
         data["device_uuid"] = device_uuid
-        data["model"] = ""
  
         result = json.load(urlopen(Request(url, data=urlencode(data), headers=headers)))
         if result["status"] == -100:
